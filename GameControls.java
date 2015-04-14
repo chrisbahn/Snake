@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class GameControls implements KeyListener{
-	
+	jnjj
 	Snake snake;
 	
 	GameControls(Snake s){

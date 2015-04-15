@@ -141,13 +141,13 @@ public class DrawSnakeGamePanel extends JPanel {
 		g.fillRect((int)head.getX(), (int)head.getY(), SnakeGame.squareSize, SnakeGame.squareSize);
 
 		//Draw rest of snake in black
-		// todo attempting to modify code to make snake body change color; find a way to iterate through a large array of colors without going 0>||<255, and repeat process for long snakes. CURRENT SETTING CREATES NEON-FLASH SNAKE; THIS IS HARD ON THE EYES BUT MAKES A REALLY COOL EFFECT FOR SOME KIND OF TEMPORARY EFFECT, LIKE SOME KIND OF SUPERPELLET
+		// todo modify code to make snake body change color. SETTING all colorA,B,C to random CREATES NEON-FLASH SNAKE; THIS IS HARD ON THE EYES BUT MAKES A REALLY COOL EFFECT FOR SOME KIND OF TEMPORARY EFFECT, LIKE SOME KIND OF SUPERPELLET. Setting the color increments to random, with low numbers, creates a snake that gradually changes from a solid to a neon flash.
 //		int colorA = randInt(0,255);
 //		int colorB = randInt(0,255);
 //		int colorC = randInt(0,255);
-		int colorA = 200;
-		int colorB = 200;
-		int colorC = 200;
+		int colorA = 250;
+		int colorB = 0;
+		int colorC = 0;
 		boolean colorAUp = true;
 		boolean colorBUp = true;
 		boolean colorCUp = true;
@@ -219,9 +219,14 @@ public class DrawSnakeGamePanel extends JPanel {
 	}
 
 	private void displayInstructions(Graphics g) {
+		g.drawString("SNAKES...",100,100); // TODO Change this quote to one that doesn't sound complainy. Potential addition: Randomize quotes about snakes here?
+		g.drawString("...why did it have to be snakes?",125,125);
+		g.drawString("- Indiana Jones",300,150);
 		g.drawString("Press any key to begin!",100,200);
-		g.drawString("Press q to quit the game",100,300);
-		g.drawString("Other instructions go here!",100,400);
+		g.drawString("Press 'w' to toggle warp walls (on/off)", 100, 250);
+		g.drawString("Other instructions go here!",100,300);
+		g.drawString("Press 'q' to quit the game",100,375);
+
 	}
 
 

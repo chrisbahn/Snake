@@ -13,7 +13,7 @@ public class SnakeGame {
 	public static int ySquares ;
 
 	// TODO this variable was originally 50. it controls the size of the individual squares. Create a toggle for small/medium/large gameboard that changes squareSize, xPixelMaxDimension and yPixelMaxDimension
-	public final static int squareSize = 100; // This number must be a divisor of xPixelMaxDimension and yPixelMaxDimension, or the edge squares are unusable
+	public final static int squareSize = 20; // This number must be a divisor of xPixelMaxDimension and yPixelMaxDimension, or the edge squares are unusable
 
 	protected static Snake snake ;
 

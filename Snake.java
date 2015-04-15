@@ -32,6 +32,10 @@ public class Snake {
 	private int maxX, maxY, squareSize;
 	private int snakeHeadX, snakeHeadY; //store coordinates of head - first segment
 
+	private static boolean warpWallOn = false; // variable that sets Warp Wall on or off
+
+
+
 	public Snake(int maxX, int maxY, int squareSize){
 		this.maxX = maxX;
 		this.maxY = maxY;
@@ -186,32 +190,48 @@ public class Snake {
 		}
 
 		//Does this make snake hit the wall?
-		if (snakeHeadX >= maxX || snakeHeadX < 0 || snakeHeadY >= maxY || snakeHeadY < 0 ) {
-			hitWall = true;
-			SnakeGame.setGameStage(SnakeGame.GAME_OVER);
-			return;
+		// IF/ELSE settings for WARP WALL
+		if (warpWallOn) {
+			//Snake hits edge of screen and teleports to the other side
+			//left side to right side
+			if (snakeHeadX < 0) {
+				snakeHeadX = maxX - 1;
+			}
+			//right to left
+			if (snakeHeadX == maxX) {
+				snakeHeadX = 0;
+			}
+			//top to bottom
+			if (snakeHeadY < 0) {
+				snakeHeadY = maxY - 1;
+			}
+			//bottom to top
+			if (snakeHeadY == maxY) {
+				snakeHeadY = 0;
+			}
+		}
+		if (!warpWallOn) {
+	//Snake hits brick wall outsides and dies
+			if (snakeHeadX >= maxX || snakeHeadX < 0 || snakeHeadY >= maxY || snakeHeadY < 0 ) {
+				hitWall = true;
+				SnakeGame.setGameStage(SnakeGame.GAME_OVER);
+				return;
+			}
 		}
 
+
 		//Does this make the snake eat its tail?
-
 		if (snakeSquares[snakeHeadX][snakeHeadY] != 0) {
-
 			ateTail = true;
 			SnakeGame.setGameStage(SnakeGame.GAME_OVER);
 			return;
 		}
-
-
-
-
-
 		//Otherwise, game is still on. Add new head
 		snakeSquares[snakeHeadX][snakeHeadY] = 1;
 
 		//If snake did not just eat, then remove tail segment
 		//to keep snake the same length.
 		//find highest number, which should now be the same as snakeSize+1, and set to 0
-
 		if (justAteMustGrowThisMuch == 0) {
 			for (int x = 0 ; x < maxX ; x++) {
 				for (int y = 0 ; y < maxY ; y++){
@@ -300,10 +320,22 @@ public class Snake {
 		if (hitWall == true || ateTail == true){
 			SnakeGame.setGameStage(SnakeGame.GAME_OVER);
 			return true;
-
 		}
 		return false;
 	}
+
+	//toggles the WarpWallOn variable when key 'w' is pressed
+	public static void warpWall() {
+		if (warpWallOn) {
+			System.out.println("Warp Wall OFF");
+			warpWallOn = false;
+		} else {
+			System.out.println("Warp Wall ON");
+			warpWallOn = true;
+		}
+	}
+
+
 
 
 }

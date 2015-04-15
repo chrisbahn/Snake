@@ -1,4 +1,3 @@
-package com.clara;
 
 import java.awt.Point;
 import java.util.LinkedList;
@@ -12,6 +11,7 @@ public class Snake {
 
 	private boolean hitWall = false;
 	private boolean ateTail = false;
+	private boolean snakeFillsSpace = false; // TODO TEST
 
 	private int snakeSquares[][];  //represents all of the squares on the screen
 	//NOT pixels!
@@ -21,14 +21,15 @@ public class Snake {
 
 	private int currentHeading;  //Direction snake is going in, ot direction user is telling snake to go
 	private int lastHeading;    //Last confirmed movement of snake. See moveSnake method
-	
+
 	private int snakeSize;   //size of snake - how many segments?
 
-	private int growthIncrement = 2; //how many squares the snake grows after it eats a kibble
+	//TODO ORIGINALLY 2; CREATE TOGGLE FOR FOR BEGINNER/EXPERT SETTING. Make one version where growthIncrement goes up 1 or more with each new kibble eaten
+	private int growthIncrement = 20; //how many squares the snake grows after it eats a kibble
 
 	private int justAteMustGrowThisMuch = 0;
 
-	private int maxX, maxY, squareSize;  
+	private int maxX, maxY, squareSize;
 	private int snakeHeadX, snakeHeadY; //store coordinates of head - first segment
 
 	public Snake(int maxX, int maxY, int squareSize){
@@ -57,7 +58,7 @@ public class Snake {
 
 		currentHeading = DIRECTION_LEFT;
 		lastHeading = DIRECTION_LEFT;
-		
+
 		justAteMustGrowThisMuch = 0;
 	}
 
@@ -113,7 +114,7 @@ public class Snake {
 
 	protected void moveSnake(){
 		//Called every clock tick
-		
+
 		//Must check that the direction snake is being sent in is not contrary to current heading
 		//So if current heading is down, and snake is being sent up, then should ignore.
 		//Without this code, if the snake is heading up, and the user presses left then down quickly, the snake will back into itself.
@@ -129,7 +130,7 @@ public class Snake {
 		if (currentHeading == DIRECTION_RIGHT && lastHeading == DIRECTION_LEFT) {
 			currentHeading = DIRECTION_LEFT; //keep going the same way
 		}
-		
+
 		//Did you hit the wall, snake? 
 		//Or eat your tail? Don't move. 
 
@@ -137,6 +138,14 @@ public class Snake {
 			SnakeGame.setGameStage(SnakeGame.GAME_OVER);
 			return;
 		}
+
+		// TODO TEST BAHN If snake filled the screen, you win.
+		if (wonGame()) {
+			SnakeGame.setGameStage(SnakeGame.GAME_WON);
+			System.out.println("YOU DID IT!");
+			return;
+		}
+
 
 		//Use snakeSquares array, and current heading, to move snake
 
@@ -159,26 +168,26 @@ public class Snake {
 		}
 
 		//now identify where to add new snake head
-		if (currentHeading == DIRECTION_UP) {		
+		if (currentHeading == DIRECTION_UP) {
 			//Subtract 1 from Y coordinate so head is one square up
 			snakeHeadY-- ;
 		}
-		if (currentHeading == DIRECTION_DOWN) {		
+		if (currentHeading == DIRECTION_DOWN) {
 			//Add 1 to Y coordinate so head is 1 square down
 			snakeHeadY++ ;
 		}
-		if (currentHeading == DIRECTION_LEFT) {		
+		if (currentHeading == DIRECTION_LEFT) {
 			//Subtract 1 from X coordinate so head is 1 square to the left
 			snakeHeadX -- ;
 		}
-		if (currentHeading == DIRECTION_RIGHT) {		
+		if (currentHeading == DIRECTION_RIGHT) {
 			//Add 1 to X coordinate so head is 1 square to the right
 			snakeHeadX ++ ;
 		}
 
 		//Does this make snake hit the wall?
 		if (snakeHeadX >= maxX || snakeHeadX < 0 || snakeHeadY >= maxY || snakeHeadY < 0 ) {
-			hitWall = true;	
+			hitWall = true;
 			SnakeGame.setGameStage(SnakeGame.GAME_OVER);
 			return;
 		}
@@ -192,13 +201,17 @@ public class Snake {
 			return;
 		}
 
+
+
+
+
 		//Otherwise, game is still on. Add new head
-		snakeSquares[snakeHeadX][snakeHeadY] = 1; 
+		snakeSquares[snakeHeadX][snakeHeadY] = 1;
 
 		//If snake did not just eat, then remove tail segment
 		//to keep snake the same length.
 		//find highest number, which should now be the same as snakeSize+1, and set to 0
-		
+
 		if (justAteMustGrowThisMuch == 0) {
 			for (int x = 0 ; x < maxX ; x++) {
 				for (int y = 0 ; y < maxY ; y++){
@@ -213,7 +226,7 @@ public class Snake {
 			justAteMustGrowThisMuch -- ;
 			snakeSize ++;
 		}
-		
+
 		lastHeading = currentHeading; //Update last confirmed heading
 
 	}
@@ -263,13 +276,15 @@ public class Snake {
 			for (int y = 0 ; y < maxY ; y++){
 				if (snakeSquares[x][y] == 0) {
 					//there is still empty space on the screen, so haven't won
+					System.out.println("not yet");
 					return false;
 				}
 			}
 		}
 		//But if we get here, the snake has filled the screen. win!
+		System.out.println("not yet - wait wait");
 		SnakeGame.setGameStage(SnakeGame.GAME_WON);
-		
+		System.out.println("ARGH");
 		return true;
 	}
 
@@ -285,7 +300,7 @@ public class Snake {
 		if (hitWall == true || ateTail == true){
 			SnakeGame.setGameStage(SnakeGame.GAME_OVER);
 			return true;
-			
+
 		}
 		return false;
 	}

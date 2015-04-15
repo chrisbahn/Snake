@@ -1,4 +1,3 @@
-package com.clara;
 
 import java.util.Timer;
 
@@ -7,13 +6,14 @@ import javax.swing.*;
 
 public class SnakeGame {
 
-	public final static int xPixelMaxDimension = 501;  //Pixels in window. 501 to have 50-pixel squares plus 1 to draw a border on last square
-	public final static int yPixelMaxDimension = 501;
+	public final static int xPixelMaxDimension = 601;  //Pixels in window. 501 to have 50-pixel squares plus 1 to draw a border on last square
+	public final static int yPixelMaxDimension = 601;
 
 	public static int xSquares ;
 	public static int ySquares ;
 
-	public final static int squareSize = 50;
+	// TODO this variable was originally 50. it controls the size of the individual squares. Create a toggle for small/medium/large gameboard that changes squareSize, xPixelMaxDimension and yPixelMaxDimension
+	public final static int squareSize = 100; // This number must be a divisor of xPixelMaxDimension and yPixelMaxDimension, or the edge squares are unusable
 
 	protected static Snake snake ;
 
@@ -32,7 +32,9 @@ public class SnakeGame {
 	private static int gameStage = BEFORE_GAME;  //use this to figure out what should be happening. 
 	//Other classes like Snake and DrawSnakeGamePanel will need to query this, and change it's value
 
-	protected static long clockInterval = 500; //controls game speed
+	// TODO create a toggle for this control
+//	protected static long clockInterval = 500; //controls game speed
+	protected static long clockInterval = 400; //controls game speed
 	//Every time the clock ticks, the snake moves
 	//This is the time between clock ticks, in milliseconds
 	//1000 milliseconds = 1  second.
@@ -100,6 +102,7 @@ public class SnakeGame {
 		return gameStage;
 	}
 
+	// TODO IF this is never used, why is it here?
 	public static boolean gameEnded() {
 		if (gameStage == GAME_OVER || gameStage == GAME_WON){
 			return true;

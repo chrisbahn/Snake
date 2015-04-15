@@ -1,27 +1,26 @@
-package com.clara;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class GameControls implements KeyListener{
-	jnjj
+
 	Snake snake;
-	
+
 	GameControls(Snake s){
 		this.snake = s;
 	}
-	
+
 	public void keyPressed(KeyEvent ev) {
 		//keyPressed events are for catching events like function keys, enter, arrow keys
 		//We want to listen for arrow keys to move snake
 		//Has to id if user pressed arrow key, and if so, send info to Snake object
 
 		//is game running? No? tell the game to draw grid, start, etc.
-		
+
 		//Get the component which generated this event
 		//Hopefully, a DrawSnakeGamePanel object.
 		//It would be a good idea to catch a ClassCastException here. 
-		
+
 		DrawSnakeGamePanel panel = (DrawSnakeGamePanel)ev.getComponent();
 
 		if (SnakeGame.getGameStage() == SnakeGame.BEFORE_GAME){
@@ -31,11 +30,21 @@ public class GameControls implements KeyListener{
 			panel.repaint();
 			return;
 		}
-		
+
 		if (SnakeGame.getGameStage() == SnakeGame.GAME_OVER){
 			snake.reset();
 			Score.resetScore();
-			
+
+			//Need to start the timer and start the game again
+			SnakeGame.newGame();
+			SnakeGame.setGameStage(SnakeGame.DURING_GAME);
+			panel.repaint();
+			return;
+		}
+		if (SnakeGame.getGameStage() == SnakeGame.GAME_WON){
+			snake.reset();
+			Score.resetScore();
+
 			//Need to start the timer and start the game again
 			SnakeGame.newGame();
 			SnakeGame.setGameStage(SnakeGame.DURING_GAME);
@@ -43,7 +52,7 @@ public class GameControls implements KeyListener{
 			return;
 		}
 
-		
+
 		if (ev.getKeyCode() == KeyEvent.VK_DOWN) {
 			//System.out.println("snake down");
 			snake.snakeDown();
@@ -74,6 +83,7 @@ public class GameControls implements KeyListener{
 	public void keyTyped(KeyEvent ev) {
 		//keyTyped events are for user typing letters on the keyboard, anything that makes a character display on the screen
 		char keyPressed = ev.getKeyChar();
+		// TODO this is where you add key combos for controlling warp walls, speed changes, and other extras.
 		char q = 'q';
 		if( keyPressed == q){
 			System.exit(0);    //quit if user presses the q key.

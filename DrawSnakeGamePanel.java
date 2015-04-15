@@ -121,8 +121,13 @@ public class DrawSnakeGamePanel extends JPanel {
 
 	private void displayKibble(Graphics g) {
 
-		//Draw the kibble in green
-		g.setColor(Color.GREEN);
+
+		//Draw the kibble in random flashing color
+		int colorA = randInt(0,255);
+		int colorB = randInt(0,255);
+		int colorC = randInt(0,255);
+		Color kibbleColor = new Color(colorA, colorB, colorC);
+		g.setColor(kibbleColor);
 
 		int x = kibble.getKibbleX() * SnakeGame.squareSize;
 		int y = kibble.getKibbleY() * SnakeGame.squareSize;
@@ -148,6 +153,15 @@ public class DrawSnakeGamePanel extends JPanel {
 		int colorA = 250;
 		int colorB = 0;
 		int colorC = 0;
+
+		Color bodySegmentColor = new Color(colorA, colorB, colorC);
+		if (snake.didEatKibble(kibble)) {
+			bodySegmentColor = new Color(randInt(0,255), randInt(0,255), randInt(0,255));
+		}
+		// TODO If you can figure out how the game reports when a kibble is eaten, you can change the snake colors to whatever kibbleColor is at the time
+
+
+
 		boolean colorAUp = true;
 		boolean colorBUp = true;
 		boolean colorCUp = true;
@@ -204,12 +218,13 @@ public class DrawSnakeGamePanel extends JPanel {
 
 
 
-			Color bodySegmentColor = new Color(colorA, colorB, colorC);
+			bodySegmentColor = new Color(colorA, colorB, colorC);
 			g.setColor(bodySegmentColor);
 			g.fillRect((int)p.getX(), (int)p.getY(), SnakeGame.squareSize, SnakeGame.squareSize);
 		}
 
 	}
+
 
 
 	public static int randInt(int min, int max) {

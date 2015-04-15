@@ -86,11 +86,15 @@ public class GameControls implements KeyListener{
 		// TODO this is where you add key combos for controlling warp walls, speed changes, and other extras.
 		char q = 'q';
 		char w = 'w';
+		char s = 's';
 		if( keyPressed == q){
 			System.exit(0);    //quit if user presses the q key.
 		}
 		if( keyPressed == w){
-			Snake.warpWall();    //TODO This is where the Warp Wall is called.
+			Snake.warpWall();    // This is where the Warp Wall is called.
+		}
+		if( keyPressed == s){
+			SnakeGame.howFast();    //TODO This is where the game speed is changed.
 		}
 	}
 

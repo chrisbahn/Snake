@@ -27,7 +27,7 @@ public class Snake {
 	//TODO ORIGINALLY 2; CREATE TOGGLE FOR FOR BEGINNER/EXPERT SETTING. Make one version where growthIncrement goes up 1 or more with each new kibble eaten
 	private int growthIncrement = 20; //how many squares the snake grows after it eats a kibble
 
-	private int justAteMustGrowThisMuch = 0;
+	protected int justAteMustGrowThisMuch = 0;
 
 	private int maxX, maxY, squareSize;
 	private int snakeHeadX, snakeHeadY; //store coordinates of head - first segment
@@ -58,7 +58,7 @@ public class Snake {
 		snakeHeadX = screenXCenter;
 		snakeHeadY = screenYCenter;
 
-		snakeSize = 3;
+		snakeSize = 5;
 
 		currentHeading = DIRECTION_LEFT;
 		lastHeading = DIRECTION_LEFT;
@@ -296,15 +296,15 @@ public class Snake {
 			for (int y = 0 ; y < maxY ; y++){
 				if (snakeSquares[x][y] == 0) {
 					//there is still empty space on the screen, so haven't won
-					System.out.println("not yet");
+				//	System.out.println("Snake hasn't filled screen");
 					return false;
 				}
 			}
 		}
 		//But if we get here, the snake has filled the screen. win!
-		System.out.println("not yet - wait wait");
+		System.out.println("Snake STILL hasn't filled screen");
 		SnakeGame.setGameStage(SnakeGame.GAME_WON);
-		System.out.println("ARGH");
+		System.out.println("Snake HAS filled screen");
 		return true;
 	}
 

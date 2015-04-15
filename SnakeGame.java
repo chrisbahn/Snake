@@ -13,7 +13,7 @@ public class SnakeGame {
 	public static int ySquares ;
 
 	// TODO this variable was originally 50. it controls the size of the individual squares. Create a toggle for small/medium/large gameboard that changes squareSize, xPixelMaxDimension and yPixelMaxDimension
-	public final static int squareSize = 20; // This number must be a divisor of xPixelMaxDimension and yPixelMaxDimension, or the edge squares are unusable
+	public final static int squareSize = 10; // This number must be a divisor of xPixelMaxDimension and yPixelMaxDimension, or the edge squares are unusable
 
 	protected static Snake snake ;
 
@@ -32,9 +32,9 @@ public class SnakeGame {
 	private static int gameStage = BEFORE_GAME;  //use this to figure out what should be happening. 
 	//Other classes like Snake and DrawSnakeGamePanel will need to query this, and change it's value
 
-	// TODO create a toggle for this control
-//	protected static long clockInterval = 500; //controls game speed
+	// TODO clockInterval controls game speed. Default will be 400. Create a toggle under GameControls that will call howFast() in SnakeGame, which will port between slow/medium/fast/crazy speeds
 	protected static long clockInterval = 400; //controls game speed
+//	public static boolean speedFast = false; TODO One way to signify speed changes is to use booleans with names that evoke what state is happening. Another possibility is for the toggle in howFast() to simply change clockInterval.
 	//Every time the clock ticks, the snake moves
 	//This is the time between clock ticks, in milliseconds
 	//1000 milliseconds = 1  second.
@@ -96,6 +96,58 @@ public class SnakeGame {
 		});
 	}
 
+	//change speed
+	public static void howFast() {
+		if (clockInterval == 500) {
+			clockInterval = 400;
+			System.out.println("clockInterval = 400. Medium-slow!");
+			System.out.println("clockInterval = " + clockInterval);
+			// Following code makes clockInterval change affect Timer and GameClock.
+			Timer timer = new Timer();
+			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel); // TODO If/when you implement Blocks, that variable needs to be added here. Same goes for the rest of this set.
+			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
+		} else if (clockInterval == 400) {
+			clockInterval = 300;
+			System.out.println("clockInterval = 300. Medium-fast!");
+			System.out.println("clockInterval = " + clockInterval);
+			// Following code makes clockInterval change affect Timer and GameClock.
+			Timer timer = new Timer();
+			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel);
+			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
+		} else if (clockInterval == 300) {
+			clockInterval = 200;
+			System.out.println("clockInterval = 200. Fast!");
+			System.out.println("clockInterval = " + clockInterval);
+			// Following code makes clockInterval change affect Timer and GameClock.
+			Timer timer = new Timer();
+			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel);
+			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
+		} else if (clockInterval == 200) {
+			clockInterval = 100;
+			System.out.println("clockInterval = 100. Very fast!");
+			System.out.println("clockInterval = " + clockInterval);
+			// Following code makes clockInterval change affect Timer and GameClock.
+			Timer timer = new Timer();
+			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel);
+			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
+		} else if (clockInterval == 100) {
+			clockInterval = 50;
+			System.out.println("clockInterval = 50. INSANELY fast!");
+			System.out.println("clockInterval = " + clockInterval);
+			// Following code makes clockInterval change affect Timer and GameClock.
+			Timer timer = new Timer();
+			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel);
+			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
+		} else if (clockInterval == 50) {
+			clockInterval = 500;
+			System.out.println("clockInterval = 500. Slow!");
+			System.out.println("clockInterval = " + clockInterval);
+			// Following code makes clockInterval change affect Timer and GameClock.
+			Timer timer = new Timer();
+			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel);
+			timer.scheduleAtFixedRate(clockTick, 0 , clockInterval);
+	}
+	}
 
 
 	public static int getGameStage() {

@@ -11,6 +11,7 @@ public class Snake {
 
 	private boolean hitWall = false;
 	private boolean ateTail = false;
+
 	private boolean snakeFillsSpace = false; // TODO TEST
 
 	private int snakeSquares[][];  //represents all of the squares on the screen
@@ -24,23 +25,24 @@ public class Snake {
 
 	private int snakeSize;   //size of snake - how many segments?
 
-	//TODO ORIGINALLY 2; CREATE TOGGLE FOR FOR BEGINNER/EXPERT SETTING. Make one version where growthIncrement goes up 1 or more with each new kibble eaten
-	private int growthIncrement = 20; //how many squares the snake grows after it eats a kibble
+	//TODO ORIGINALLY 2; CREATE TOGGLE FOR FOR BEGINNER/EXPERT SETTING? Make one version where growthIncrement goes up 1 or more with each new kibble eaten
+	private int growthIncrement = 2; //how many squares the snake grows after it eats a kibble
 
 	protected int justAteMustGrowThisMuch = 0;
 
-	private int maxX, maxY, squareSize;
+	private int maxX, maxY, snakeSquareSize;
 	private int snakeHeadX, snakeHeadY; //store coordinates of head - first segment
 
 	private static boolean warpWallOn = false; // variable that sets Warp Wall on or off
 
 
-
-	public Snake(int maxX, int maxY, int squareSize){
+	// Constructor for Snake
+	public Snake(int maxX, int maxY, int snakeSquareSize){
 		this.maxX = maxX;
 		this.maxY = maxY;
-		this.squareSize = squareSize;
-		//Create and fill snakeSquares with 0s 
+		this.snakeSquareSize = snakeSquareSize;
+//		this.snakeSquareSize = SnakeGame.squareSize; TODO IS THIS VALUE BETTER?
+		//Create and fill snakeSquares with 0s
 		snakeSquares = new int[maxX][maxY];
 		fillSnakeSquaresWithZeros();
 		createStartSnake();
@@ -58,7 +60,7 @@ public class Snake {
 		snakeHeadX = screenXCenter;
 		snakeHeadY = screenYCenter;
 
-		snakeSize = 5;
+		snakeSize = 3;
 
 		currentHeading = DIRECTION_LEFT;
 		lastHeading = DIRECTION_LEFT;
@@ -84,8 +86,9 @@ public class Snake {
 				for (int y = 0 ; y < maxY ; y++) {
 					if (snakeSquares[x][y] == segment){
 						//make a Point for this segment's coordinates and add to list
-						Point p = new Point(x * squareSize , y * squareSize);
+						Point p = new Point(x * snakeSquareSize , y * snakeSquareSize);
 						segmentCoordinates.add(p);
+						// System.out.println("coordinates: " + x * snakeSquareSize + " " + y * snakeSquareSize);
 					}
 				}
 			}
@@ -219,6 +222,18 @@ public class Snake {
 			}
 		}
 
+		// Did Snake hit the inner blocks?
+		if (Block.blocksOn) {
+			//Snake hits brick wall insides and dies
+			if (snakeHeadX == Block.getBlock1X() && snakeHeadY == Block.getBlock1Y()) {
+				hitWall = true;
+				System.out.println("You hit a block!");
+				SnakeGame.setGameStage(SnakeGame.GAME_OVER);
+				return;
+			}
+		}
+
+
 
 		//Does this make the snake eat its tail?
 		if (snakeSquares[snakeHeadX][snakeHeadY] != 0) {
@@ -271,6 +286,8 @@ public class Snake {
 		//Is this kibble in the snake? It should be in the same square as the snake's head
 		if (kibble.getKibbleX() == snakeHeadX && kibble.getKibbleY() == snakeHeadY){
 			justAteMustGrowThisMuch += growthIncrement;
+			growthIncrement++; // TODO Put an if loop around this so an advanced version of the game increases growthIncrement, but basic does not
+			System.out.println("growthIncrement = " + growthIncrement);
 			return true;
 		}
 		return false;
@@ -335,9 +352,31 @@ public class Snake {
 		}
 	}
 
-
-
-
+// these have to be used in SnakeGame.HowBig or the snake gets drawn weirdly
+	public int getMaxX() {
+		return maxX;
+	}
+	public void setMaxX(int maxX) {
+		this.maxX = maxX;
+	}
+	public int getMaxY() {
+		return maxY;
+	}
+	public void setMaxY(int maxY) {
+		this.maxY = maxY;
+	}
+	public int getSnakeSquareSize() {
+		return snakeSquareSize;
+	}
+	public void setSnakeSquareSize(int snakeSquareSize) {
+		this.snakeSquareSize = snakeSquareSize;
+	}
+	public int[][] getSnakeSquares() {
+		return snakeSquares;
+	}
+	public void setSnakeSquares(int[][] snakeSquares) {
+		this.snakeSquares = snakeSquares;
+	}
 }
 
 

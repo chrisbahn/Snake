@@ -5,12 +5,14 @@ public class GameClock extends TimerTask {
 
 	Snake snake;
 	Kibble kibble;
+	Block block;
 	Score score; // TODO Findbugs says this field is never read - should it be deleted, or should it be used in the program?
 	DrawSnakeGamePanel gamePanel;
 
-	public GameClock(Snake snake, Kibble kibble, Score score, DrawSnakeGamePanel gamePanel){
+	public GameClock(Snake snake, Kibble kibble, Block block, Score score, DrawSnakeGamePanel gamePanel){
 		this.snake = snake;
 		this.kibble = kibble;
+		this.block = block;
 		this.score = score;
 		this.gamePanel = gamePanel;
 	}
@@ -31,7 +33,7 @@ public class GameClock extends TimerTask {
 				snake.moveSnake();
 				if (snake.didEatKibble(kibble) == true) {
 					//tell kibble to update
-					kibble.moveKibble(snake);
+					kibble.moveKibble(snake,block);
 					Score.increaseScore();
 				}
 				break;

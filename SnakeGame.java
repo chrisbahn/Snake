@@ -6,20 +6,18 @@ import javax.swing.*;
 
 public class SnakeGame {
 
-	public final static int xPixelMaxDimension = 601;  //Pixels in window. 501 to have 50-pixel squares plus 1 to draw a border on last square
-	public final static int yPixelMaxDimension = 601;
-
-	public static int xSquares ;
+	// The variables below control the size of the gameboard and the individual squares. I deleted "final" from these variables and squareSize so they can be changed in the "howBig" method.
+	public static int xPixelMaxDimension = 501;  //Pixels in window. 501 to have 50-pixel squares plus 1 to draw a border on last square
+	public static int yPixelMaxDimension = 501;
+	public static int bottomPanelHeight = 150;
+	public static int squareSize = 25; // pixels per square. TODO It controls the size of the individual squares. It must be a divisor of xPixelMaxDimension and yPixelMaxDimension, or the edge squares are unusable. Also, if this value is changed from its initial declaration, it messes up the way the snake is drawn. Not sure why. Can that be fixed?
+	public static int xSquares ; // these two variables are used below to help create gameboard; they are controlled by the values in the three variables above.
 	public static int ySquares ;
 
-	// TODO this variable was originally 50. it controls the size of the individual squares. Create a toggle for small/medium/large gameboard that changes squareSize, xPixelMaxDimension and yPixelMaxDimension
-	public final static int squareSize = 10; // This number must be a divisor of xPixelMaxDimension and yPixelMaxDimension, or the edge squares are unusable
-
 	protected static Snake snake ;
-
 	protected static Kibble kibble;
-
 	protected static Score score;
+	protected static Block block;
 
 	static final int BEFORE_GAME = 1;
 	static final int DURING_GAME = 2;
@@ -32,9 +30,7 @@ public class SnakeGame {
 	private static int gameStage = BEFORE_GAME;  //use this to figure out what should be happening. 
 	//Other classes like Snake and DrawSnakeGamePanel will need to query this, and change it's value
 
-	// TODO clockInterval controls game speed. Default will be 400. Create a toggle under GameControls that will call howFast() in SnakeGame, which will port between slow/medium/fast/crazy speeds
-	protected static long clockInterval = 400; //controls game speed
-//	public static boolean speedFast = false; TODO One way to signify speed changes is to use booleans with names that evoke what state is happening. Another possibility is for the toggle in howFast() to simply change clockInterval.
+	protected static long clockInterval = 400; //controls game speed; changed in the "howFast" method below. default is "slow"
 	//Every time the clock ticks, the snake moves
 	//This is the time between clock ticks, in milliseconds
 	//1000 milliseconds = 1  second.
@@ -50,12 +46,12 @@ public class SnakeGame {
 		snakeFrame = new JFrame();
 		snakeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		snakeFrame.setSize(xPixelMaxDimension, yPixelMaxDimension);
+		snakeFrame.setSize(xPixelMaxDimension, yPixelMaxDimension+bottomPanelHeight); // TODO Adding text area below main game pane
 		snakeFrame.setUndecorated(true); //hide title bar
 		snakeFrame.setVisible(true);
 		snakeFrame.setResizable(false);
 
-		snakePanel = new DrawSnakeGamePanel(snake, kibble, score);
+		snakePanel = new DrawSnakeGamePanel(snake, kibble, block, score);
 		snakePanel.setFocusable(true);
 		snakePanel.requestFocusInWindow(); //required to give this component the focus so it can generate KeyEvents
 
@@ -68,12 +64,13 @@ public class SnakeGame {
 	}
 
 	private static void initializeGame() {
-		//set up score, snake and first kibble
+		//set up score, snake and first kibble, and Block locations
 		xSquares = xPixelMaxDimension / squareSize;
 		ySquares = yPixelMaxDimension / squareSize;
 
-		snake = new Snake(xSquares, ySquares, squareSize);
-		kibble = new Kibble(snake);
+		snake = new Snake(xSquares, ySquares, squareSize); // TODO MAYBE THIS IS THE KEY TO FIXING THE SIZING ISSUE. DECLARE A NEW SNAKE WHEN YOU CHANGE SIZE OF BOARD?
+		block = new Block(snake);
+		kibble = new Kibble(snake,block);
 		score = new Score();
 
 		gameStage = BEFORE_GAME;
@@ -81,7 +78,7 @@ public class SnakeGame {
 
 	protected static void newGame() {
 		Timer timer = new Timer();
-		GameClock clockTick = new GameClock(snake, kibble, score, snakePanel);
+		GameClock clockTick = new GameClock(snake, kibble, block, score, snakePanel);
 		timer.scheduleAtFixedRate(clockTick, 0 , clockInterval);
 	}
 
@@ -104,7 +101,7 @@ public class SnakeGame {
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
 			Timer timer = new Timer();
-			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel); // TODO If/when you implement Blocks, that variable needs to be added here. Same goes for the rest of this set.
+			GameClock clockTick = new GameClock(snake, kibble, block, score, snakePanel); // TODO If/when you implement Blocks, that variable needs to be added here. Same goes for the rest of this set.
 			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
 		} else if (clockInterval == 400) {
 			clockInterval = 300;
@@ -112,7 +109,7 @@ public class SnakeGame {
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
 			Timer timer = new Timer();
-			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel);
+			GameClock clockTick = new GameClock(snake, kibble, block, score, snakePanel);
 			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
 		} else if (clockInterval == 300) {
 			clockInterval = 200;
@@ -120,7 +117,7 @@ public class SnakeGame {
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
 			Timer timer = new Timer();
-			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel);
+			GameClock clockTick = new GameClock(snake, kibble, block, score, snakePanel);
 			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
 		} else if (clockInterval == 200) {
 			clockInterval = 100;
@@ -128,7 +125,7 @@ public class SnakeGame {
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
 			Timer timer = new Timer();
-			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel);
+			GameClock clockTick = new GameClock(snake, kibble, block, score, snakePanel);
 			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
 		} else if (clockInterval == 100) {
 			clockInterval = 50;
@@ -136,7 +133,7 @@ public class SnakeGame {
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
 			Timer timer = new Timer();
-			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel);
+			GameClock clockTick = new GameClock(snake, kibble, block, score, snakePanel);
 			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
 		} else if (clockInterval == 50) {
 			clockInterval = 500;
@@ -144,11 +141,54 @@ public class SnakeGame {
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
 			Timer timer = new Timer();
-			GameClock clockTick = new GameClock(snake, kibble, score, snakePanel);
+			GameClock clockTick = new GameClock(snake, kibble, block, score, snakePanel);
 			timer.scheduleAtFixedRate(clockTick, 0 , clockInterval);
 	}
 	}
 
+	//change size of screen
+	public static void howBig(int bigness) {
+		if (bigness == 1) { // a small game
+			xPixelMaxDimension = 501;
+			yPixelMaxDimension = 501;
+//			squareSize = 50;
+//			snake = new Snake(xSquares, ySquares, squareSize); // TODO Creating a new Snake here does not solve sizing issue. Keep trying
+			System.out.println("bigness = 1. Small game!");
+		}
+		else if (bigness == 2) { // a medium game
+			xPixelMaxDimension = 601;
+			yPixelMaxDimension = 601;
+//			squareSize = 25;
+			System.out.println("bigness = 2. Medium game!");
+		}
+		else if (bigness == 3) { // a large game
+			xPixelMaxDimension = 751;
+			yPixelMaxDimension = 751;
+//			squareSize = 25;
+			System.out.println("bigness = 3. Large game!");
+		}
+		else if (bigness == 4) { // a very large game
+			xPixelMaxDimension = 951;
+			yPixelMaxDimension = 751;
+//			squareSize = 10;
+			System.out.println("bigness = 4. Enormous game!");
+		}
+		else if (bigness == 5) { // a very large game
+			xPixelMaxDimension = 1201;
+			yPixelMaxDimension = 751;
+//			squareSize = 5;
+			System.out.println("bigness = 5. GARGANTUAN game!");
+		}
+
+		//changes above are used here to set game size
+		snakeFrame.setSize(xPixelMaxDimension, yPixelMaxDimension);
+		xSquares = xPixelMaxDimension / squareSize;
+		ySquares = yPixelMaxDimension / squareSize;
+		snake.setMaxX(xPixelMaxDimension / squareSize);
+		snake.setMaxY(yPixelMaxDimension / squareSize);
+		snake.setSnakeSquares(new int[xPixelMaxDimension / squareSize][yPixelMaxDimension / squareSize]);
+
+	}
 
 	public static int getGameStage() {
 		return gameStage;

@@ -16,11 +16,13 @@ public class DrawSnakeGamePanel extends JPanel {
 
 	private Snake snake;
 	private Kibble kibble;
+	private Block block;
 	private Score score;
 
-	DrawSnakeGamePanel(Snake s, Kibble k, Score sc){
+	DrawSnakeGamePanel(Snake s, Kibble k, Block block, Score sc){
 		this.snake = s;
 		this.kibble = k;
+		this.block = block;
 		this.score = sc;
 	}
 
@@ -97,6 +99,7 @@ public class DrawSnakeGamePanel extends JPanel {
 		displayGameGrid(g);
 		displaySnake(g);
 		displayKibble(g);
+		displayBlock(g);
 	}
 
 	private void displayGameGrid(Graphics g) {
@@ -107,7 +110,7 @@ public class DrawSnakeGamePanel extends JPanel {
 
 		g.clearRect(0, 0, maxX, maxY);
 
-		g.setColor(Color.darkGray);
+		g.setColor(Color.lightGray);
 
 		//Draw grid - horizontal lines
 		for (int y=0; y <= maxY ; y+= squareSize){
@@ -120,28 +123,36 @@ public class DrawSnakeGamePanel extends JPanel {
 	}
 
 	private void displayKibble(Graphics g) {
-
-
 		//Draw the kibble in random flashing color
 		int colorA = randInt(0,255);
 		int colorB = randInt(0,255);
 		int colorC = randInt(0,255);
 		Color kibbleColor = new Color(colorA, colorB, colorC);
 		g.setColor(kibbleColor);
-
 		int x = kibble.getKibbleX() * SnakeGame.squareSize;
 		int y = kibble.getKibbleY() * SnakeGame.squareSize;
-
 		g.fillRect(x+1, y+1, SnakeGame.squareSize-2, SnakeGame.squareSize-2);
+	}
 
+	private void displayBlock(Graphics g) {
+		//draw wall in black
+		Color blockColor = new Color(0, 0, 0);
+		g.setColor(blockColor);
+//get position of wall and multiply it by square size (to make as big as grid square)
+		if (Block.blocksOn) {
+			int x = block.getBlock1X() * SnakeGame.squareSize;
+			int y = block.getBlock1Y() * SnakeGame.squareSize;
+			g.fillRect(x, y, SnakeGame.squareSize, SnakeGame.squareSize);
+		}
 	}
 
 	private void displaySnake(Graphics g) {
-
 		LinkedList<Point> coordinates = snake.segmentsToDraw();
 
-		//Draw head in grey
-		g.setColor(Color.LIGHT_GRAY);
+		//Draw head in flashing neon
+		Color headSegmentColor = new Color(randInt(0,255), randInt(0,255), randInt(0,255));
+		g.setColor(headSegmentColor);
+	//	g.setColor(Color.LIGHT_GRAY);
 		Point head = coordinates.pop();
 		g.fillRect((int)head.getX(), (int)head.getY(), SnakeGame.squareSize, SnakeGame.squareSize);
 
@@ -154,9 +165,11 @@ public class DrawSnakeGamePanel extends JPanel {
 		int colorB = 0;
 		int colorC = 0;
 
-		Color bodySegmentColor = new Color(colorA, colorB, colorC);
+//		Color bodySegmentColor = new Color(colorA, colorB, colorC);
+		Color bodySegmentColor = new Color(randInt(0,255), randInt(0,255), randInt(0,255));
 		if (snake.didEatKibble(kibble)) {
 			bodySegmentColor = new Color(randInt(0,255), randInt(0,255), randInt(0,255));
+			g.setColor(bodySegmentColor);
 		}
 		// TODO If you can figure out how the game reports when a kibble is eaten, you can change the snake colors to whatever kibbleColor is at the time
 
@@ -216,11 +229,9 @@ public class DrawSnakeGamePanel extends JPanel {
 				}
 			}
 
-
-
 			bodySegmentColor = new Color(colorA, colorB, colorC);
 			g.setColor(bodySegmentColor);
-			g.fillRect((int)p.getX(), (int)p.getY(), SnakeGame.squareSize, SnakeGame.squareSize);
+			g.fillRect((int) p.getX(), (int) p.getY(), SnakeGame.squareSize, SnakeGame.squareSize);
 		}
 
 	}
@@ -234,13 +245,17 @@ public class DrawSnakeGamePanel extends JPanel {
 	}
 
 	private void displayInstructions(Graphics g) {
-		g.drawString("SNAKES...",100,100); // TODO Change this quote to one that doesn't sound complainy. Potential addition: Randomize quotes about snakes here?
-		g.drawString("...why did it have to be snakes?",125,125);
-		g.drawString("- Indiana Jones",300,150);
-		g.drawString("Press any key to begin!",100,200);
-		g.drawString("Press 'w' to toggle warp walls (on/off)", 100, 250);
-		g.drawString("Other instructions go here!",100,300);
-		g.drawString("Press 'q' to quit the game",100,375);
+		g.drawString("SNAKES...",50,100); // TODO Change this quote to one that doesn't sound complainy. Potential addition: Randomize quotes about snakes here?
+		g.drawString("...why did it have to be snakes?",75,125);
+		g.drawString("- Indiana Jones",250,150);
+		g.drawString("Press any key to begin!",50,200);
+		g.drawString("Press 'w' to toggle warp walls on/off", 50, 250);
+		g.drawString("Press 'b' to toggle blocks on/off", 50, 275);
+		g.drawString("Press 's' to cycle through game speeds", 50, 300);
+		g.drawString("(very slow to insanely fast!)", 100, 325);
+		g.drawString("Press 1, 2, 3, 4 or 5 to choose a gameboard size", 50, 350);
+		g.drawString("(small/medium/large/enormous/gargantuan!)", 100, 375);
+		g.drawString("Press 'q' to quit the game",50,450);
 
 	}
 

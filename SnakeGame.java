@@ -35,6 +35,8 @@ public class SnakeGame {
 	//This is the time between clock ticks, in milliseconds
 	//1000 milliseconds = 1  second.
 
+	protected static int bigness = 1; //controls game board size; changed in the "howBig" method below. default is "small"
+
 	static JFrame snakeFrame;
 	static DrawSnakeGamePanel snakePanel;
 	//Framework for this class adapted from the Java Swing Tutorial, FrameDemo and Custom Painting Demo. You should find them useful too.
@@ -95,13 +97,14 @@ public class SnakeGame {
 
 	//change speed
 	public static void howFast() {
+		// Every time the method is called via a keypress of 's', the if/else loops automatically change the speed state.
 		if (clockInterval == 500) {
 			clockInterval = 400;
 			System.out.println("clockInterval = 400. Medium-slow!");
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
 			Timer timer = new Timer();
-			GameClock clockTick = new GameClock(snake, kibble, block, score, snakePanel); // TODO If/when you implement Blocks, that variable needs to be added here. Same goes for the rest of this set.
+			GameClock clockTick = new GameClock(snake, kibble, block, score, snakePanel);
 			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
 		} else if (clockInterval == 400) {
 			clockInterval = 300;
@@ -146,38 +149,54 @@ public class SnakeGame {
 	}
 	}
 
+	//returns the status of the game speed
+	public static String howFastIsGame() {
+		if (clockInterval == 500) {
+			return "Very slow!";
+		} else if (clockInterval == 400) {
+			return "Slow!";
+		} else if (clockInterval == 300) {
+			return "Not very fast!";
+		} else if (clockInterval == 200) {
+			return "Quite fast!";
+		} else if (clockInterval == 100) {
+			return "Very fast!";
+		} else if (clockInterval == 50) {
+			return "INSANELY fast!";
+		}
+		return "Slow!"; //default
+	}
+
+
+
 	//change size of screen
-	public static void howBig(int bigness) {
+	public static int howBig(int howBigIsGamePanel) {
+		bigness = howBigIsGamePanel;
 		if (bigness == 1) { // a small game
 			xPixelMaxDimension = 501;
 			yPixelMaxDimension = 501;
 //			squareSize = 50;
 //			snake = new Snake(xSquares, ySquares, squareSize); // TODO Creating a new Snake here does not solve sizing issue. Keep trying
-			System.out.println("bigness = 1. Small game!");
 		}
 		else if (bigness == 2) { // a medium game
 			xPixelMaxDimension = 601;
 			yPixelMaxDimension = 601;
 //			squareSize = 25;
-			System.out.println("bigness = 2. Medium game!");
 		}
 		else if (bigness == 3) { // a large game
 			xPixelMaxDimension = 751;
 			yPixelMaxDimension = 601;
 //			squareSize = 25;
-			System.out.println("bigness = 3. Large game!");
 		}
 		else if (bigness == 4) { // a very large game
 			xPixelMaxDimension = 951;
 			yPixelMaxDimension = 601;
 //			squareSize = 10;
-			System.out.println("bigness = 4. Enormous game!");
 		}
 		else if (bigness == 5) { // a very large game
 			xPixelMaxDimension = 1201;
 			yPixelMaxDimension = 601;
 //			squareSize = 5;
-			System.out.println("bigness = 5. GARGANTUAN game!");
 		}
 
 		//changes above are used here to set game size
@@ -187,8 +206,29 @@ public class SnakeGame {
 		snake.setMaxX(xPixelMaxDimension / squareSize);
 		snake.setMaxY(yPixelMaxDimension / squareSize);
 		snake.setSnakeSquares(new int[xPixelMaxDimension / squareSize][yPixelMaxDimension / squareSize]);
-
+		return bigness;
 	}
+
+	//returns the status of the gameboard size
+	public static String whatSizeIsGame() {
+		if (bigness == 1) { // a small game
+			return "Small!";
+		}
+		else if (bigness == 2) { // a medium game
+			return "Medium!";
+		}
+		else if (bigness == 3) { // a large game
+			return "Large!";
+		}
+		else if (bigness == 4) { // a very large game
+			return "Enormous!";
+		}
+		else if (bigness == 5) { // a very large game
+			return "GARGANTUAN!";
+		}
+		return "1. Small game!"; // default is small
+	}
+
 
 	public static int getGameStage() {
 		return gameStage;

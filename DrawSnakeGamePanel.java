@@ -104,9 +104,18 @@ public class DrawSnakeGamePanel extends JPanel {
 		displaySnake(g);
 		displayKibble(g);
 		displayBlock(g);
-		g.drawString("This is test text 1!",25,SnakeGame.yPixelMaxDimension+10);
-		g.drawString("This is test text 2!",25,SnakeGame.yPixelMaxDimension+25);
-		g.drawString("This is test text 3!",25,SnakeGame.yPixelMaxDimension+100);
+		String textScore = score.getStringScore();
+		String textHighScore = score.getStringHighScore();
+		String newHighScore = score.newHighScore();
+		String warpStatus = (Snake.isWarpWallOn());
+		String gamesizeStatus = (SnakeGame.whatSizeIsGame());
+		String speedStatus = (SnakeGame.howFastIsGame());
+
+		g.drawString("Score: " + textScore ,10,SnakeGame.yPixelMaxDimension+25);
+		g.drawString("High score: " + textHighScore,10,SnakeGame.yPixelMaxDimension+45);
+		g.drawString("Warp walls: " +  warpStatus,10,SnakeGame.yPixelMaxDimension+65);
+		g.drawString("Size: " +  gamesizeStatus,10,SnakeGame.yPixelMaxDimension+85);
+		g.drawString("Speed: " +  speedStatus,10,SnakeGame.yPixelMaxDimension+105);
 
 	}
 

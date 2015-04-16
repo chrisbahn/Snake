@@ -352,7 +352,16 @@ public class Snake {
 		}
 	}
 
-// these have to be used in SnakeGame.HowBig or the snake gets drawn weirdly
+	//returns the status of the WarpWallOn variable
+	public static String isWarpWallOn() {
+		if (warpWallOn) {
+			return "ON";
+		} else {
+			return "OFF";
+		}
+	}
+
+	// these have to be used in SnakeGame.HowBig or the snake gets drawn weirdly
 	public int getMaxX() {
 		return maxX;
 	}

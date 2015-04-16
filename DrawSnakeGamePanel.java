@@ -13,6 +13,9 @@ import javax.swing.JPanel;
 public class DrawSnakeGamePanel extends JPanel {
 
 	private static int gameStage = SnakeGame.BEFORE_GAME;  //use this to figure out what to paint
+	// These two variables aid in centering text and graphics during the non-game portions of the program (displaying endgame results, etc.)
+	int screenXCenter = (int) SnakeGame.xPixelMaxDimension/2;  //Cast just in case we have an odd number
+	int screenYCenter = (int) SnakeGame.yPixelMaxDimension/2;  //Cast just in case we have an odd number
 
 	private Snake snake;
 	private Kibble kibble;
@@ -30,6 +33,7 @@ public class DrawSnakeGamePanel extends JPanel {
 
 	}
 
+	// This creates a two-part visual display: The game on top, and a bottom display panel for scores and etc.
 	public Dimension getPreferredSize() {
 		return new Dimension(SnakeGame.xPixelMaxDimension, SnakeGame.yPixelMaxDimension+SnakeGame.bottomPanelHeight);
 	}
@@ -77,25 +81,20 @@ public class DrawSnakeGamePanel extends JPanel {
 	}
 	private void displayGameOver(Graphics g) {
 
-		g.clearRect(100,100,350,350);
-		g.drawString("GAME OVER", 150, 150);
+		g.clearRect(screenXCenter-175,screenYCenter-175,350,350);
+		g.drawString("GAME OVER", screenXCenter-50,screenYCenter-150);
 
 		String textScore = score.getStringScore();
 		String textHighScore = score.getStringHighScore();
-		String newHighScore = score.newHighScore();
+		g.drawString("SCORE = " + textScore, screenXCenter-50,screenYCenter-100);
 
-		g.drawString("SCORE = " + textScore, 150, 250);
-
-		g.drawString("HIGH SCORE = " + textHighScore, 150, 300);
-		g.drawString(newHighScore, 150, 400);
-		// BAHN TODO: IMPLEMENT A BOOLEAN CHECK ON NEW HIGH SCORE, THEN PULL THE TRIGGER ON THE FOLLOWING IF LOOP:
-//		if (thereIsNewHighScore) {
-//			g.drawString("NEW HIGH SCORE!", 150, 325);
-//		thereIsNewHighScore = false; // should this be reset here, or at the game-restart method? probably the latter! but if it works here, what the hell
-//		}
-
-		g.drawString("press a key to play again", 150, 350);
-		g.drawString("Press q to quit the game",150,400);
+		g.drawString("HIGH SCORE = " + textHighScore, screenXCenter-50,screenYCenter-50);
+		// Displays only if user got a new high score this round
+		if (score.isThereNewHighScore()) {
+			g.drawString("NEW HIGH SCORE!", screenXCenter-50,screenYCenter);
+		}
+		g.drawString("press a key to play again", screenXCenter-100,screenYCenter+100);
+		g.drawString("Press q to quit the game",screenXCenter-100,screenYCenter+125);
 
 	}
 
@@ -104,18 +103,28 @@ public class DrawSnakeGamePanel extends JPanel {
 		displaySnake(g);
 		displayKibble(g);
 		displayBlock(g);
+
+		// The following code allows score, etc. to be updated on screen in real time during game
 		String textScore = score.getStringScore();
 		String textHighScore = score.getStringHighScore();
-		String newHighScore = score.newHighScore();
 		String warpStatus = (Snake.isWarpWallOn());
-		String gamesizeStatus = (SnakeGame.whatSizeIsGame());
-		String speedStatus = (SnakeGame.howFastIsGame());
+		String gamesizeStatus = (SnakeGame.getSizeOfGame());
+		String speedStatus = (SnakeGame.getSpeedOfGame());
+		int snakeSize = (Snake.getSnakeSize());
+		String growthRate = (Snake.whatIsSnakeGrowthRate());
 
 		g.drawString("Score: " + textScore ,10,SnakeGame.yPixelMaxDimension+25);
+		if (!score.isThereNewHighScore()) {
 		g.drawString("High score: " + textHighScore,10,SnakeGame.yPixelMaxDimension+45);
-		g.drawString("Warp walls: " +  warpStatus,10,SnakeGame.yPixelMaxDimension+65);
-		g.drawString("Size: " +  gamesizeStatus,10,SnakeGame.yPixelMaxDimension+85);
-		g.drawString("Speed: " +  speedStatus,10,SnakeGame.yPixelMaxDimension+105);
+		// Displays only if user got a new high score this round
+		} else if (score.isThereNewHighScore()) {
+			g.drawString("NEW HIGH SCORE: " + textHighScore,10,SnakeGame.yPixelMaxDimension+45);
+		}
+		g.drawString("Warp walls (w): " +  warpStatus,10,SnakeGame.yPixelMaxDimension+65);
+		g.drawString("Size (1-5): " +  gamesizeStatus,10,SnakeGame.yPixelMaxDimension+85);
+		g.drawString("Speed (s): " +  speedStatus,10,SnakeGame.yPixelMaxDimension+105);
+		g.drawString("Snake length: " +  snakeSize,10,SnakeGame.yPixelMaxDimension+125);
+		g.drawString("Growth rate (g): " +  growthRate,10,SnakeGame.yPixelMaxDimension+145);
 
 	}
 
@@ -155,7 +164,7 @@ public class DrawSnakeGamePanel extends JPanel {
 		//draw wall in black
 		Color blockColor = new Color(0, 0, 0);
 		g.setColor(blockColor);
-//get position of wall and multiply it by square size (to make as big as grid square)
+		//get position of wall and multiply it by square size (to make as big as grid square)
 		if (Block.blocksOn) {
 			int x = block.getBlock1X() * SnakeGame.squareSize;
 			int y = block.getBlock1Y() * SnakeGame.squareSize;
@@ -190,16 +199,16 @@ public class DrawSnakeGamePanel extends JPanel {
 		}
 		// TODO If you can figure out how the game reports when a kibble is eaten, you can change the snake colors to whatever kibbleColor is at the time
 
-
-
+// The colorup booleans control whether the color is iterating up or down. colorincrement controls how quickly it does so.
 		boolean colorAUp = true;
 		boolean colorBUp = true;
 		boolean colorCUp = true;
 		int colorAIncrement = 5;
 		int colorBIncrement = 7;
 		int colorCIncrement = 3;
-//		int colorAIncrement = randInt(0,25);
-//		int colorBIncrement = randInt(0,25);
+		// the settings below create a snake that is solid-colored at first, but increasingly begins to flash in different colors the longer it gets.
+//		int colorAIncrement = randInt(0,1);
+//		int colorBIncrement = randInt(0,1);
 //		int colorCIncrement = randInt(0,1);
 
 		for (Point p : coordinates) {
@@ -262,9 +271,9 @@ public class DrawSnakeGamePanel extends JPanel {
 	}
 
 	private void displayInstructions(Graphics g) {
-		g.drawString("SNAKES...",50,100); // TODO Change this quote. Potential addition: Randomize quotes about snakes here?
-		g.drawString("...why did it have to be snakes?",75,125);
-		g.drawString("- Indiana Jones",250,150);
+		g.drawString("Welcome to SNAKE II: THE REVENGE OF SNAKE I",50,50);
+		g.drawString("Round and round they went with their snakes, snakily...",50,100); // TODO Change this quote. Potential addition: Randomize quotes about snakes here, and as a lagniappe during displayGame?
+		g.drawString("― Aldous Huxley, Brave New World",75,125);
 		g.drawString("Press any key to begin!",50,200);
 		g.drawString("Press 'w' to toggle warp walls on/off", 50, 250);
 		g.drawString("Press 'b' to toggle blocks on/off", 50, 275);
@@ -272,10 +281,11 @@ public class DrawSnakeGamePanel extends JPanel {
 		g.drawString("(very slow to insanely fast!)", 100, 325);
 		g.drawString("Press 1, 2, 3, 4 or 5 to choose a gameboard size", 50, 350);
 		g.drawString("(small/medium/large/enormous/gargantuan!)", 100, 375);
+		g.drawString("Press 's' to change snake growth rate", 50, 400);
+		g.drawString("(normal, fast, or alarming!)", 100, 425);
 		g.drawString("Press 'q' to quit the game",50,450);
-		g.drawString("This is test text 1!",25,SnakeGame.yPixelMaxDimension+10);
-		g.drawString("This is test text 2!",25,SnakeGame.yPixelMaxDimension+25);
-		g.drawString("This is test text 3!",25,SnakeGame.yPixelMaxDimension+100);
+// To write something in the bottom panel adapt the code below and use yPixelMaxDimension+10 to yPixelMaxDimension+140
+//		g.drawString("This is test text 1!",25,SnakeGame.yPixelMaxDimension+10);
 
 	}
 

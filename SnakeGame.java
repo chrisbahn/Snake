@@ -70,7 +70,7 @@ public class SnakeGame {
 		xSquares = xPixelMaxDimension / squareSize;
 		ySquares = yPixelMaxDimension / squareSize;
 
-		snake = new Snake(xSquares, ySquares, squareSize); // TODO MAYBE THIS IS THE KEY TO FIXING THE SIZING ISSUE. DECLARE A NEW SNAKE WHEN YOU CHANGE SIZE OF BOARD?
+		snake = new Snake(xSquares, ySquares, squareSize);
 		block = new Block(snake);
 		kibble = new Kibble(snake,block);
 		score = new Score();
@@ -82,6 +82,8 @@ public class SnakeGame {
 		Timer timer = new Timer();
 		GameClock clockTick = new GameClock(snake, kibble, block, score, snakePanel);
 		timer.scheduleAtFixedRate(clockTick, 0 , clockInterval);
+		// resets newHighScore boolean so that each new game is not a newHighScore until user actually achieves that in-game
+		Score.newHighScore = false;
 	}
 
 	public static void main(String[] args) {
@@ -150,7 +152,7 @@ public class SnakeGame {
 	}
 
 	//returns the status of the game speed
-	public static String howFastIsGame() {
+	public static String getSpeedOfGame() {
 		if (clockInterval == 500) {
 			return "Very slow!";
 		} else if (clockInterval == 400) {
@@ -170,7 +172,7 @@ public class SnakeGame {
 
 
 	//change size of screen
-	public static int howBig(int howBigIsGamePanel) {
+	public static void howBig(int howBigIsGamePanel) {
 		bigness = howBigIsGamePanel;
 		if (bigness == 1) { // a small game
 			xPixelMaxDimension = 501;
@@ -206,11 +208,10 @@ public class SnakeGame {
 		snake.setMaxX(xPixelMaxDimension / squareSize);
 		snake.setMaxY(yPixelMaxDimension / squareSize);
 		snake.setSnakeSquares(new int[xPixelMaxDimension / squareSize][yPixelMaxDimension / squareSize]);
-		return bigness;
 	}
 
 	//returns the status of the gameboard size
-	public static String whatSizeIsGame() {
+	public static String getSizeOfGame() {
 		if (bigness == 1) { // a small game
 			return "Small!";
 		}

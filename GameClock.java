@@ -6,7 +6,7 @@ public class GameClock extends TimerTask {
 	Snake snake;
 	Kibble kibble;
 	Block block;
-	Score score; // TODO Findbugs says this field is never read - should it be deleted, or should it be used in the program?
+	Score score;
 	DrawSnakeGamePanel gamePanel;
 
 	public GameClock(Snake snake, Kibble kibble, Block block, Score score, DrawSnakeGamePanel gamePanel){

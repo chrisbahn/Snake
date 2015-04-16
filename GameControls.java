@@ -88,6 +88,7 @@ public class GameControls implements KeyListener{
 		char w = 'w';
 		char s = 's';
 		char b = 'b';
+		char g = 'g';
 		char n1 = '1';
 		char n2 = '2';
 		char n3 = '3';
@@ -116,6 +117,9 @@ public class GameControls implements KeyListener{
 		}
 		if( keyPressed == n5){
 			SnakeGame.howBig(5);
+		}
+		if( keyPressed == g){
+			Snake.changeSnakeGrowthRate();
 		}
 		if( keyPressed == b){
 			Block.areBlocksOn(); 	// toggles the blocks on and off

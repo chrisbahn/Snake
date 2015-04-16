@@ -9,6 +9,7 @@ public class Score {
 	protected static int score;
 	protected static int highScore = 0;
 	protected static int increment;
+	protected static boolean newHighScore = false; // creates a toggle to flip if user hits new high score during game
 
 	public Score(){
 		score = 0;
@@ -48,14 +49,13 @@ public class Score {
 		return Integer.toString(score);
 	}
 
-	public String newHighScore() {
-
+// updated method returns true if user gets new high score in middle of game, as well as updating int highScore.
+	public boolean isThereNewHighScore() {
 		if (score > highScore) {
 			highScore = score;
-			return "New High Score!!";
-		} else {
-			return "";
+			newHighScore = true;
 		}
+		return newHighScore;
 	}
 
 	public String getStringHighScore() {

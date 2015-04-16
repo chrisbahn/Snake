@@ -13,6 +13,8 @@ public class Snake {
 	private boolean ateTail = false;
 
 	private boolean snakeFillsSpace = false; // TODO TEST
+	private static boolean snakeGrowsQuickly = false; // two booleans here add options to increase snake growth after eating kibble
+	private static boolean snakeGrowsReallyQuickly = false; //
 
 	private int snakeSquares[][];  //represents all of the squares on the screen
 	//NOT pixels!
@@ -23,7 +25,7 @@ public class Snake {
 	private int currentHeading;  //Direction snake is going in, ot direction user is telling snake to go
 	private int lastHeading;    //Last confirmed movement of snake. See moveSnake method
 
-	private int snakeSize;   //size of snake - how many segments?
+	private static int snakeSize;   //size of snake - how many segments?
 
 	//TODO ORIGINALLY 2; CREATE TOGGLE FOR FOR BEGINNER/EXPERT SETTING? Make one version where growthIncrement goes up 1 or more with each new kibble eaten
 	private int growthIncrement = 2; //how many squares the snake grows after it eats a kibble
@@ -41,7 +43,6 @@ public class Snake {
 		this.maxX = maxX;
 		this.maxY = maxY;
 		this.snakeSquareSize = snakeSquareSize;
-//		this.snakeSquareSize = SnakeGame.squareSize; TODO IS THIS VALUE BETTER?
 		//Create and fill snakeSquares with 0s
 		snakeSquares = new int[maxX][maxY];
 		fillSnakeSquaresWithZeros();
@@ -227,7 +228,7 @@ public class Snake {
 			//Snake hits brick wall insides and dies
 			if (snakeHeadX == Block.getBlock1X() && snakeHeadY == Block.getBlock1Y()) {
 				hitWall = true;
-				System.out.println("You hit a block!");
+				System.out.println("You hit a block!"); // TODO Add this text to the display panel
 				SnakeGame.setGameStage(SnakeGame.GAME_OVER);
 				return;
 			}
@@ -286,7 +287,12 @@ public class Snake {
 		//Is this kibble in the snake? It should be in the same square as the snake's head
 		if (kibble.getKibbleX() == snakeHeadX && kibble.getKibbleY() == snakeHeadY){
 			justAteMustGrowThisMuch += growthIncrement;
-			growthIncrement++; // TODO Put an if loop around this so an advanced version of the game increases growthIncrement, but basic does not
+		// following code sets advanced options where snake grows a little more each time, or grows a LOT each time
+			if (snakeGrowsQuickly&&!snakeGrowsReallyQuickly) {
+				growthIncrement++;
+			} else if (snakeGrowsQuickly&&snakeGrowsReallyQuickly) {
+				growthIncrement += 20;
+			}
 			System.out.println("growthIncrement = " + growthIncrement);
 			return true;
 		}
@@ -360,6 +366,30 @@ public class Snake {
 			return "OFF";
 		}
 	}
+	//toggles between the three snake growth variables when key 'g' is pressed
+	public static void changeSnakeGrowthRate() {
+		if (!snakeGrowsQuickly&&!snakeGrowsReallyQuickly) {
+			snakeGrowsQuickly = true;
+			snakeGrowsReallyQuickly = false;
+		} else if (snakeGrowsQuickly&&!snakeGrowsReallyQuickly) {
+			snakeGrowsQuickly = true;
+			snakeGrowsReallyQuickly = true;
+		} else {
+			snakeGrowsQuickly = false;
+			snakeGrowsReallyQuickly = false;
+		}
+	}
+
+	//returns the status of the snake's growrth rate
+	public static String whatIsSnakeGrowthRate() {
+		if (!snakeGrowsQuickly&&!snakeGrowsReallyQuickly) {
+			return "Normal";
+		} else if (snakeGrowsQuickly&&!snakeGrowsReallyQuickly) {
+			return "Fast";
+		} else {
+			return "ALARMING";
+		}
+	}
 
 	// these have to be used in SnakeGame.HowBig or the snake gets drawn weirdly
 	public int getMaxX() {
@@ -386,6 +416,12 @@ public class Snake {
 	public void setSnakeSquares(int[][] snakeSquares) {
 		this.snakeSquares = snakeSquares;
 	}
+
+	public static int getSnakeSize() {
+		return snakeSize;
+	}
+
+
 }
 
 

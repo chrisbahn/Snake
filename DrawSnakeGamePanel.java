@@ -24,10 +24,14 @@ public class DrawSnakeGamePanel extends JPanel {
 		this.kibble = k;
 		this.block = block;
 		this.score = sc;
+		//set the background color to black
+		Color backgroundColor = new Color(200, 200, 250);
+		setBackground(backgroundColor);
+
 	}
 
 	public Dimension getPreferredSize() {
-		return new Dimension(SnakeGame.xPixelMaxDimension, SnakeGame.yPixelMaxDimension);
+		return new Dimension(SnakeGame.xPixelMaxDimension, SnakeGame.yPixelMaxDimension+SnakeGame.bottomPanelHeight);
 	}
 
 	public void paintComponent(Graphics g) {
@@ -100,6 +104,10 @@ public class DrawSnakeGamePanel extends JPanel {
 		displaySnake(g);
 		displayKibble(g);
 		displayBlock(g);
+		g.drawString("This is test text 1!",25,SnakeGame.yPixelMaxDimension+10);
+		g.drawString("This is test text 2!",25,SnakeGame.yPixelMaxDimension+25);
+		g.drawString("This is test text 3!",25,SnakeGame.yPixelMaxDimension+100);
+
 	}
 
 	private void displayGameGrid(Graphics g) {
@@ -245,7 +253,7 @@ public class DrawSnakeGamePanel extends JPanel {
 	}
 
 	private void displayInstructions(Graphics g) {
-		g.drawString("SNAKES...",50,100); // TODO Change this quote to one that doesn't sound complainy. Potential addition: Randomize quotes about snakes here?
+		g.drawString("SNAKES...",50,100); // TODO Change this quote. Potential addition: Randomize quotes about snakes here?
 		g.drawString("...why did it have to be snakes?",75,125);
 		g.drawString("- Indiana Jones",250,150);
 		g.drawString("Press any key to begin!",50,200);
@@ -256,6 +264,9 @@ public class DrawSnakeGamePanel extends JPanel {
 		g.drawString("Press 1, 2, 3, 4 or 5 to choose a gameboard size", 50, 350);
 		g.drawString("(small/medium/large/enormous/gargantuan!)", 100, 375);
 		g.drawString("Press 'q' to quit the game",50,450);
+		g.drawString("This is test text 1!",25,SnakeGame.yPixelMaxDimension+10);
+		g.drawString("This is test text 2!",25,SnakeGame.yPixelMaxDimension+25);
+		g.drawString("This is test text 3!",25,SnakeGame.yPixelMaxDimension+100);
 
 	}
 

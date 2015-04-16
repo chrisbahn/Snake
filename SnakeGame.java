@@ -163,25 +163,25 @@ public class SnakeGame {
 		}
 		else if (bigness == 3) { // a large game
 			xPixelMaxDimension = 751;
-			yPixelMaxDimension = 751;
+			yPixelMaxDimension = 601;
 //			squareSize = 25;
 			System.out.println("bigness = 3. Large game!");
 		}
 		else if (bigness == 4) { // a very large game
 			xPixelMaxDimension = 951;
-			yPixelMaxDimension = 751;
+			yPixelMaxDimension = 601;
 //			squareSize = 10;
 			System.out.println("bigness = 4. Enormous game!");
 		}
 		else if (bigness == 5) { // a very large game
 			xPixelMaxDimension = 1201;
-			yPixelMaxDimension = 751;
+			yPixelMaxDimension = 601;
 //			squareSize = 5;
 			System.out.println("bigness = 5. GARGANTUAN game!");
 		}
 
 		//changes above are used here to set game size
-		snakeFrame.setSize(xPixelMaxDimension, yPixelMaxDimension);
+		snakeFrame.setSize(xPixelMaxDimension, yPixelMaxDimension+bottomPanelHeight);
 		xSquares = xPixelMaxDimension / squareSize;
 		ySquares = yPixelMaxDimension / squareSize;
 		snake.setMaxX(xPixelMaxDimension / squareSize);

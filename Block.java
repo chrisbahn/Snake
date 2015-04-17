@@ -2,21 +2,21 @@
  * Created by christopherbahn on 4/15/15.
  */
 
-import java.util.Random;
+import java.util.*;
 public class Block {
 
-    private static int block1X; // Creates X coordinate for impassable block. This is the square number (not pixel)
-    private static int block1Y;  //Creates Y coordinate for impassable block. This is the square number (not pixel)
-    private int[] blockArrayX; // Creates X coordinate array for the blocks. TODO if block1X works, this is the next step
-    private int[] blockArrayY;  //Creates Y coordinate for impassable block. This is the square number (not pixel)
+    private static int blockX; // This code creates X/Y coordinates for three impassable blocks. This is the square number (not pixel)
+    private static int blockY;
+    protected static LinkedList<Integer> blocksListX = new LinkedList<Integer>();
+    protected static LinkedList<Integer> blocksListY = new LinkedList<Integer>();
     public static boolean blocksOn = true;
-
+    public static int howManyBlocks = 5;
     public Block(Snake s){
         placeBlock(s);
     }
 
     //keytype 'b' toggles the blocks on or off
-    public static void areBlocksOn() {
+    public static void blocksOn() {
         if (blocksOn) {
             blocksOn = false;
         } else {
@@ -24,36 +24,63 @@ public class Block {
         }
     }
 
-    protected void placeBlock(Snake s){
-        Random rng = new Random();
-        boolean blockInSnake = true;
-        while (blockInSnake == true && blocksOn == true) {
-            //Generate random block location
-            block1X = rng.nextInt(SnakeGame.xSquares);
-            block1Y = rng.nextInt(SnakeGame.ySquares);
-            blockInSnake = s.isSnakeSegment(block1X, block1Y); //Is block inside the Snake? It shouldn't be
+    //returns the status of the WarpWallOn variable
+    public static String areBlocksOn() {
+        if (blocksOn) {
+            return "ON";
+        } else {
+            return "OFF";
         }
     }
 
 
-
-
-
-    public static int getBlock1X() {
-        return block1X;
+    protected void placeBlock(Snake s){
+        Random rng = new Random();
+        boolean blockInSnake = true;
+        while (blockInSnake == true) {
+            //Generate random block locations
+            for (int i = 0; i < howManyBlocks; i++) {
+                blockX = rng.nextInt(SnakeGame.xSquares);
+                blockY = rng.nextInt(SnakeGame.ySquares);
+                blockInSnake = Snake.isSnakeSegment(blockX, blockY); //Is block inside the Snake? It shouldn't be
+                if (!blockInSnake) {
+                    blocksListX.add(blockX);
+                    blocksListY.add(blockY);
+                }
+            }
+        }
     }
-    public void setBlock1X(int block1X) {
-        this.block1X = block1X;
-    }
-    public static int getBlock1Y() {
-        return block1Y;
-    }
-    public void setBlock1Y(int block1Y) {
-        this.block1Y = block1Y;
+
+
+    public static int getBlockX() {
+        return blockX;
     }
 
+    public static void setBlockX(int blockX) {
+        Block.blockX = blockX;
+    }
 
+    public static int getBlockY() {
+        return blockY;
+    }
 
+    public static void setBlockY(int blockY) {
+        Block.blockY = blockY;
+    }
 
+    public static boolean isBlocksOn() {
+        return blocksOn;
+    }
 
+    public static void setBlocksOn(boolean blocksOn) {
+        Block.blocksOn = blocksOn;
+    }
+
+    public static int getHowManyBlocks() {
+        return howManyBlocks;
+    }
+
+    public static void setHowManyBlocks(int howManyBlocks) {
+        Block.howManyBlocks = howManyBlocks;
+    }
 }

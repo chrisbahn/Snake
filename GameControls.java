@@ -83,28 +83,33 @@ public class GameControls implements KeyListener{
 	public void keyTyped(KeyEvent ev) {
 		//keyTyped events are for user typing letters on the keyboard, anything that makes a character display on the screen
 		char keyPressed = ev.getKeyChar();
-		// TODO this is where you add key combos for controlling warp walls, speed changes, and other extras.
-		char q = 'q';
-		char w = 'w';
-		char s = 's';
+		// this is where key combos for controlling warp walls, speed changes, and other extras are controlled
 		char b = 'b';
+		char B = 'B';
 		char g = 'g';
+		char G = 'G';
+		char q = 'q';
+		char Q = 'Q';
+		char s = 's';
+		char S = 'S';
+		char w = 'w';
+		char W = 'W';
 		char n1 = '1';
 		char n2 = '2';
 		char n3 = '3';
 		char n4 = '4';
 		char n5 = '5';
-		if( keyPressed == q){
+		if( keyPressed == q||keyPressed == Q){
 			System.exit(0);    //quit if user presses the q key.
 		}
-		if( keyPressed == w){
+		if( keyPressed == w||keyPressed == W){
 			Snake.warpWall();    // This is where the Warp Wall is called.
 		}
-		if( keyPressed == s){
+		if( keyPressed == s||keyPressed == S){
 			SnakeGame.howFast();    //This is where the game speed is changed.
 		}
 		if( keyPressed == n1){
-			SnakeGame.howBig(1);    //TODO The n1,n2,n3,n4,n5 variables control the size of the gameboard.
+			SnakeGame.howBig(1);    // The n1,n2,n3,n4,n5 variables control the size of the gameboard.
 		}
 		if( keyPressed == n2){
 			SnakeGame.howBig(2);
@@ -118,11 +123,11 @@ public class GameControls implements KeyListener{
 		if( keyPressed == n5){
 			SnakeGame.howBig(5);
 		}
-		if( keyPressed == g){
+		if( keyPressed == g||keyPressed == G){
 			Snake.changeSnakeGrowthRate();
 		}
-		if( keyPressed == b){
-			Block.areBlocksOn(); 	// toggles the blocks on and off
+		if( keyPressed == b||keyPressed == B){
+			Block.blocksOn();    // toggles the blocks on and off
 		}
 	}
 

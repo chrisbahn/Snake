@@ -13,8 +13,7 @@ public class Score {
 
 	public Score(){
 		score = 0;
-		increment = 1;  //how many points for eating a kibble
-		//Possible TODO get more points for eating kibbles, the longer the snake gets?
+		increment = 0;  //how many points for eating a kibble. Changed to zero here because adjustScoreIncrement's extra points begin at 1 anyway
 	}
 
 	public static void resetScore() {
@@ -22,10 +21,29 @@ public class Score {
 	}
 
 	public static void increaseScore() {
-
 		score = score + increment;
-
 	}
+
+	public static void adjustScoreIncrement() {
+		// more points if blocks on, warp wall off, large gameboard, faster speed, and as a percentage of the length of the snake
+		int extraPoints = 0;
+		if (!Snake.warpWallOn) {
+			extraPoints++;
+		}
+		if (Block.blocksOn) {
+			extraPoints++;
+		}
+		if (Snake.snakeGrowsQuickly) {
+			extraPoints++;
+		}
+		if (Snake.snakeGrowsReallyQuickly) {
+			extraPoints+=3;
+		}
+		// increment equals all the bonuses, starting at a minimum of 1. This decreases if user switches to easier modes. Bigness and Fastness are reduced by 1 each here to keep the amount of increase down; it could be pumped up for a really high-scoring game
+		increment = extraPoints + SnakeGame.getBigness()-1 + SnakeGame.getFastness()-1 + Snake.snakeSize/10 ;
+		System.out.println("increment = " + (extraPoints + 1 + SnakeGame.getBigness() + SnakeGame.getFastness()));
+	}
+
 
 	public int getScore(){
 		return score;
@@ -60,6 +78,10 @@ public class Score {
 
 	public String getStringHighScore() {
 		return Integer.toString(highScore);
+	}
+
+	public static int getIncrement() {
+		return increment;
 	}
 
 }

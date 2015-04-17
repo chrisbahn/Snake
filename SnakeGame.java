@@ -1,4 +1,7 @@
+// Original code by Clara James
+// Enhancements made by Christopher Bahn
 
+import java.util.Random;
 import java.util.Timer;
 
 import javax.swing.*;
@@ -9,10 +12,11 @@ public class SnakeGame {
 	// The variables below control the size of the gameboard and the individual squares. I deleted "final" from these variables and squareSize so they can be changed in the "howBig" method.
 	public static int xPixelMaxDimension = 501;  //Pixels in window. 501 to have 50-pixel squares plus 1 to draw a border on last square
 	public static int yPixelMaxDimension = 501;
-	public static int bottomPanelHeight = 150;
-	public static int squareSize = 25; // pixels per square. TODO It controls the size of the individual squares. It must be a divisor of xPixelMaxDimension and yPixelMaxDimension, or the edge squares are unusable. Also, if this value is changed from its initial declaration, it messes up the way the snake is drawn. Not sure why. Can that be fixed?
-	public static int xSquares ; // these two variables are used below to help create gameboard; they are controlled by the values in the three variables above.
+	public static int squareSize = 25; // pixels per square. It controls the size of the individual squares. It must be a divisor of xPixelMaxDimension and yPixelMaxDimension, or the edge squares are unusable. TODO If this value is changed after its initial declaration, it messes up the way the snake is drawn.
+	public static int xSquares ; // these two variables are used below to help create gameboard; they are controlled by the values in the  variables above.
 	public static int ySquares ;
+	// sets the height of the text panel beneath the main game pane
+	public static int bottomPanelHeight = 150;
 
 	protected static Snake snake ;
 	protected static Kibble kibble;
@@ -36,6 +40,7 @@ public class SnakeGame {
 	//1000 milliseconds = 1  second.
 
 	protected static int bigness = 1; //controls game board size; changed in the "howBig" method below. default is "small"
+	protected static int fastness = 2; //controls game speed; changed in the "howFast" method below. default is "slow"
 
 	static JFrame snakeFrame;
 	static DrawSnakeGamePanel snakePanel;
@@ -48,7 +53,7 @@ public class SnakeGame {
 		snakeFrame = new JFrame();
 		snakeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		snakeFrame.setSize(xPixelMaxDimension, yPixelMaxDimension+bottomPanelHeight); // TODO Adding text area below main game pane
+		snakeFrame.setSize(xPixelMaxDimension, yPixelMaxDimension+bottomPanelHeight); // Adding text area below main game pane
 		snakeFrame.setUndecorated(true); //hide title bar
 		snakeFrame.setVisible(true);
 		snakeFrame.setResizable(false);
@@ -102,6 +107,7 @@ public class SnakeGame {
 		// Every time the method is called via a keypress of 's', the if/else loops automatically change the speed state.
 		if (clockInterval == 500) {
 			clockInterval = 400;
+			fastness = 2;
 			System.out.println("clockInterval = 400. Medium-slow!");
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
@@ -110,6 +116,7 @@ public class SnakeGame {
 			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
 		} else if (clockInterval == 400) {
 			clockInterval = 300;
+			fastness = 3;
 			System.out.println("clockInterval = 300. Medium-fast!");
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
@@ -118,6 +125,7 @@ public class SnakeGame {
 			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
 		} else if (clockInterval == 300) {
 			clockInterval = 200;
+			fastness = 4;
 			System.out.println("clockInterval = 200. Fast!");
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
@@ -126,6 +134,7 @@ public class SnakeGame {
 			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
 		} else if (clockInterval == 200) {
 			clockInterval = 100;
+			fastness = 5;
 			System.out.println("clockInterval = 100. Very fast!");
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
@@ -134,6 +143,7 @@ public class SnakeGame {
 			timer.scheduleAtFixedRate(clockTick, clockInterval , clockInterval);
 		} else if (clockInterval == 100) {
 			clockInterval = 50;
+			fastness = 6;
 			System.out.println("clockInterval = 50. INSANELY fast!");
 			System.out.println("clockInterval = " + clockInterval);
 			// Following code makes clockInterval change affect Timer and GameClock.
@@ -169,6 +179,9 @@ public class SnakeGame {
 		return "Slow!"; //default
 	}
 
+	public static int getFastness() {
+		return fastness;
+	}
 
 
 	//change size of screen
@@ -178,7 +191,6 @@ public class SnakeGame {
 			xPixelMaxDimension = 501;
 			yPixelMaxDimension = 501;
 //			squareSize = 50;
-//			snake = new Snake(xSquares, ySquares, squareSize); // TODO Creating a new Snake here does not solve sizing issue. Keep trying
 		}
 		else if (bigness == 2) { // a medium game
 			xPixelMaxDimension = 601;
@@ -224,12 +236,15 @@ public class SnakeGame {
 		else if (bigness == 4) { // a very large game
 			return "Enormous!";
 		}
-		else if (bigness == 5) { // a very large game
+		else if (bigness == 5) { // a very very large game
 			return "GARGANTUAN!";
 		}
-		return "1. Small game!"; // default is small
+		return "Small game!"; // default is small
 	}
 
+	public static int getBigness() {
+		return bigness;
+	}
 
 	public static int getGameStage() {
 		return gameStage;
@@ -246,4 +261,7 @@ public class SnakeGame {
 	public static void setGameStage(int gameStage) {
 		SnakeGame.gameStage = gameStage;
 	}
+
+
+
 }

@@ -12,11 +12,10 @@ public class Snake {
 	private boolean hitWall = false;
 	private boolean ateTail = false;
 
-	private boolean snakeFillsSpace = false; // TODO TEST
-	private static boolean snakeGrowsQuickly = false; // two booleans here add options to increase snake growth after eating kibble
-	private static boolean snakeGrowsReallyQuickly = false; //
+	protected static boolean snakeGrowsQuickly = false; // two booleans here add options to increase snake growth after eating kibble
+	protected static boolean snakeGrowsReallyQuickly = false; //
 
-	private int snakeSquares[][];  //represents all of the squares on the screen
+	public static int[][] snakeSquares;  //represents all of the squares on the screen
 	//NOT pixels!
 	//A 0 means there is no part of the snake in this square
 	//A non-zero number means part of the snake is in the square
@@ -25,9 +24,8 @@ public class Snake {
 	private int currentHeading;  //Direction snake is going in, ot direction user is telling snake to go
 	private int lastHeading;    //Last confirmed movement of snake. See moveSnake method
 
-	private static int snakeSize;   //size of snake - how many segments?
+	protected static int snakeSize;   //size of snake - how many segments?
 
-	//TODO ORIGINALLY 2; CREATE TOGGLE FOR FOR BEGINNER/EXPERT SETTING? Make one version where growthIncrement goes up 1 or more with each new kibble eaten
 	private int growthIncrement = 2; //how many squares the snake grows after it eats a kibble
 
 	protected int justAteMustGrowThisMuch = 0;
@@ -35,7 +33,7 @@ public class Snake {
 	private int maxX, maxY, snakeSquareSize;
 	private int snakeHeadX, snakeHeadY; //store coordinates of head - first segment
 
-	private static boolean warpWallOn = false; // variable that sets Warp Wall on or off
+	protected static boolean warpWallOn = true; // variable that sets Warp Wall on or off
 
 
 	// Constructor for Snake
@@ -69,6 +67,7 @@ public class Snake {
 		justAteMustGrowThisMuch = 0;
 	}
 
+	// the method erases the snake when a new game is called
 	private void fillSnakeSquaresWithZeros() {
 		for (int x = 0; x < this.maxX; x++){
 			for (int y = 0 ; y < this.maxY ; y++) {
@@ -115,11 +114,6 @@ public class Snake {
 		currentHeading = DIRECTION_RIGHT;
 	}
 
-//	public void	eatKibble(){
-//		//record how much snake needs to grow after eating food
-//		justAteMustGrowThisMuch += growthIncrement;
-//	}
-
 	protected void moveSnake(){
 		//Called every clock tick
 
@@ -144,13 +138,6 @@ public class Snake {
 
 		if (hitWall == true || ateTail == true) {
 			SnakeGame.setGameStage(SnakeGame.GAME_OVER);
-			return;
-		}
-
-		// TODO TEST BAHN If snake filled the screen, you win.
-		if (wonGame()) {
-			SnakeGame.setGameStage(SnakeGame.GAME_WON);
-			System.out.println("YOU DID IT!");
 			return;
 		}
 
@@ -226,15 +213,15 @@ public class Snake {
 		// Did Snake hit the inner blocks?
 		if (Block.blocksOn) {
 			//Snake hits brick wall insides and dies
-			if (snakeHeadX == Block.getBlock1X() && snakeHeadY == Block.getBlock1Y()) {
-				hitWall = true;
-				System.out.println("You hit a block!"); // TODO Add this text to the display panel
-				SnakeGame.setGameStage(SnakeGame.GAME_OVER);
-				return;
+				for (int i = 0; i < Block.howManyBlocks; i++) {
+					if (snakeHeadX == Block.blocksListX.get(i) && snakeHeadY == Block.blocksListY.get(i)) {
+						hitWall = true;
+						System.out.println("You hit a block!"); // TODO Add this text to the display panel
+						SnakeGame.setGameStage(SnakeGame.GAME_OVER);
+						return;
+					}
+				}
 			}
-		}
-
-
 
 		//Does this make the snake eat its tail?
 		if (snakeSquares[snakeHeadX][snakeHeadY] != 0) {
@@ -242,6 +229,9 @@ public class Snake {
 			SnakeGame.setGameStage(SnakeGame.GAME_OVER);
 			return;
 		}
+
+
+
 		//Otherwise, game is still on. Add new head
 		snakeSquares[snakeHeadX][snakeHeadY] = 1;
 
@@ -269,14 +259,13 @@ public class Snake {
 
 	protected boolean didHitWall(){
 		return hitWall;
-
 	}
 
 	protected boolean didEatTail(){
 		return ateTail;
 	}
 
-	public boolean isSnakeSegment(int kibbleX, int kibbleY) {
+	public static boolean isSnakeSegment(int kibbleX, int kibbleY) {
 		if (snakeSquares[kibbleX][kibbleY] == 0) {
 			return false;
 		}
@@ -312,8 +301,7 @@ public class Snake {
 	}
 
 	public boolean wonGame() {
-
-		//If all of the squares have snake segments in, the snake has eaten so much kibble 
+		//If all of the squares have snake segments in them, except for the very last kibble, the snake has eaten so much kibble
 		//that it has filled the screen. Win!
 		for (int x = 0 ; x < maxX ; x++) {
 			for (int y = 0 ; y < maxY ; y++){
@@ -331,12 +319,12 @@ public class Snake {
 		return true;
 	}
 
+
 	public void reset() {
 		hitWall = false;
 		ateTail = false;
 		fillSnakeSquaresWithZeros();
 		createStartSnake();
-
 	}
 
 	public boolean isGameOver() {

@@ -1,7 +1,9 @@
+// Original code by Clara James
+// Enhancements made by Christopher Bahn
 
 import java.awt.*;
 import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 import javax.swing.JPanel;
 
@@ -82,7 +84,7 @@ public class DrawSnakeGamePanel extends JPanel {
 		g.fillRect(15, 15, SnakeGame.xPixelMaxDimension - 30, SnakeGame.yPixelMaxDimension - 15);
 		g.setColor(Color.YELLOW);
 		g.setFont(new Font("default", Font.BOLD, g.getFont().getSize() + 50));
-		g.drawString("YOU WON SNAKE!!!", (SnakeGame.xPixelMaxDimension / 2) - 150, (SnakeGame.yPixelMaxDimension / 2) - 150);
+		g.drawString("YOU WON!", (SnakeGame.xPixelMaxDimension / 2) - 150, (SnakeGame.yPixelMaxDimension / 2) - 150);
 		g.setFont(new Font("default", Font.BOLD, g.getFont().getSize() - 45));
 		g.setColor(Color.WHITE);
 		g.drawString("SCORE: " + textScore, (SnakeGame.xPixelMaxDimension / 2) - 150, (SnakeGame.yPixelMaxDimension / 2) - 75);
@@ -227,6 +229,8 @@ public class DrawSnakeGamePanel extends JPanel {
 //		}
 
 	}
+
+
 
 	private void displaySnake(Graphics g) {
 		LinkedList<Point> coordinates = snake.segmentsToDraw();

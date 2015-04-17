@@ -1,3 +1,5 @@
+// Original code by Clara James
+// Enhancements made by Christopher Bahn
 
 import java.util.Random;
 

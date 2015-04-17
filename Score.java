@@ -1,3 +1,5 @@
+// Original code by Clara James
+// Enhancements made by Christopher Bahn
 
 /** Keeps track of, and display the user's score
  *
@@ -41,7 +43,6 @@ public class Score {
 		}
 		// increment equals all the bonuses, starting at a minimum of 1. This decreases if user switches to easier modes. Bigness and Fastness are reduced by 1 each here to keep the amount of increase down; it could be pumped up for a really high-scoring game
 		increment = extraPoints + SnakeGame.getBigness()-1 + SnakeGame.getFastness()-1 + Snake.snakeSize/10 ;
-		System.out.println("increment = " + (extraPoints + 1 + SnakeGame.getBigness() + SnakeGame.getFastness()));
 	}
 
 

@@ -1,3 +1,5 @@
+// Original code by Clara James
+// Enhancements made by Christopher Bahn
 /**
  * Created by christopherbahn on 4/15/15.
  */

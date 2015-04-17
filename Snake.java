@@ -255,6 +255,12 @@ public class Snake {
 
 		lastHeading = currentHeading; //Update last confirmed heading
 
+		// Did you win? Check here, and if you did, end the game
+		if (wonGame()) {
+			SnakeGame.setGameStage(SnakeGame.GAME_WON);
+			return;
+		}
+
 	}
 
 	protected boolean didHitWall(){
@@ -303,20 +309,25 @@ public class Snake {
 	public boolean wonGame() {
 		//If all of the squares have snake segments in them, except for the very last kibble, the snake has eaten so much kibble
 		//that it has filled the screen. Win!
+		int tabulator = 0;
 		for (int x = 0 ; x < maxX ; x++) {
 			for (int y = 0 ; y < maxY ; y++){
-				if (snakeSquares[x][y] == 0) {
-					//there is still empty space on the screen, so haven't won
-				//	System.out.println("Snake hasn't filled screen");
-					return false;
+				if (snakeSquares[x][y] != 0) { //if not zero, the square is a snake, and not a) empty, b) a block, or c) kibble
+					tabulator ++;
 				}
 			}
 		}
-		//But if we get here, the snake has filled the screen. win!
-		System.out.println("Snake STILL hasn't filled screen");
-		SnakeGame.setGameStage(SnakeGame.GAME_WON);
-		System.out.println("Snake HAS filled screen");
-		return true;
+		// If the total number of squares on the board equals tabulator plus the number of known blocks and kibbles on the board, then the snake must be filling all the space, with no empty squares left. Meaning, you won! Extra if/else wrapper accounts for whether the blocks are on or off.
+		if (Block.blocksOn) {
+			if ((maxX*maxY) == (tabulator + Block.howManyBlocks + 1)) {
+				return true;
+			}
+			} else {
+			if ((maxX*maxY) == (tabulator + 1)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 

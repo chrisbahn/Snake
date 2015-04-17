@@ -221,6 +221,11 @@ public class DrawSnakeGamePanel extends JPanel {
 		g.drawString("Board size (1-5): " +  gamesizeStatus,150,SnakeGame.yPixelMaxDimension+80);
 		g.drawString("Speed (s): " +  speedStatus,150,SnakeGame.yPixelMaxDimension+100);
 		g.drawString("Snake growth rate (g): " +  growthRate,150,SnakeGame.yPixelMaxDimension+120);
+
+//		if (SnakeGame.getBigness()== 5) {
+//			g.drawString("Test! Now is the time for all good men to come to the aid of their country." +  growthRate,400,SnakeGame.yPixelMaxDimension+120);
+//		}
+
 	}
 
 	private void displaySnake(Graphics g) {
@@ -350,7 +355,6 @@ public class DrawSnakeGamePanel extends JPanel {
 		g.drawString("Round and round they went with their snakes, snakily...", 75, SnakeGame.yPixelMaxDimension + 70);
 		g.setFont(new Font("default", Font.PLAIN, g.getFont().getSize()));
 		g.drawString("― Aldous Huxley, Brave New World",100,SnakeGame.yPixelMaxDimension+90);
-
 	}
 
 
